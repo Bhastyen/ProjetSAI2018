@@ -5,6 +5,7 @@
 #include "GL/glut.h"
 
 #include "paraRectangle.h"
+#include "snake.h"
 
 #define PI 3.14156
 #define LARGEUR 10
@@ -35,7 +36,7 @@ void quadrillage();
 void afficher_cube(int x1,int y1,int z1, int x2, int y2, int z2);
 
 
-
+float Z = 0;
 int main(int argc, char* argv[]){
 
     p = creer_para(2.0, 2.0, 2.0, 20.0, 20.0, 3.0);
@@ -94,7 +95,9 @@ void Affichage(){
     // envoie des points pour le cube
     draw_para(p);
     //afficher_cube(-1.0, -1.0, -1.0, 1.0, 1.0, 1.0);
-    
+     creerSnake(creer_point(Z,0,0),0);
+     Z+=0.5;
+     if(Z==30.0)Z=0;
     // envoie des donnees
     glFlush();
     

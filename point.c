@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "point.h"
 
@@ -21,6 +22,13 @@ point* creer_point(float x, float y, float z){
     
     return p;
 }
+point* creer_point_angle_pos(float teta,float phy,float rayon,point* position){
+	float x = (float)(rayon*cos(phy)*cos(teta)) + getX(position);
+	float y = (float)(rayon*cos(phy)*sin(teta)) + getY(position);
+	float z = (float)(rayon * sin(phy))+ getZ(position);
+	return creer_point(x,y,z);
+}
+
 
 float getX(point* p){
     if (p != NULL){

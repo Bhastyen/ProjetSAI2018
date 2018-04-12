@@ -11,6 +11,12 @@ typedef struct {
 
 point* creer_point(float x, float y, float z);
 
+/*Fonction :point* creer_point_angle(float teta,float phy,float rayon);
+Genere un point en fonction de deux angle
+
+*/
+point* creer_point_angle_pos(float teta,float phy,float rayon,point* position);
+
 float getX(point* p);
 float getY(point* p);
 float getZ(point* p);
