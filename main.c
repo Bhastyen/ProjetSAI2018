@@ -29,7 +29,7 @@ int xRel = 0, yRel = 0; int xOld = 0, yOld = 0;*/
 
 camera* c;
 para* p;
-
+snake* serpent;
 
 void gestionClavier(unsigned char c, int x, int y);
 void gestionSouris(int x, int y);
@@ -46,7 +46,7 @@ int main(int argc, char* argv[]){
     
     // creation de l'environnement
     p = creer_para(2.0, 2.0, 2.0, 20.0, 20.0, 3.0);
-    
+    serpent = creerSnake(creer_point(Z,0,0),0);
     // initialisation de glut
     glutInit(&argc, argv);
     // initialisation du mode d'affichage
@@ -103,10 +103,12 @@ void Affichage(){
     // envoie des points pour le cube
     draw_para(p);
     
-    //afficher_cube(-1.0, -1.0, -1.0, 1.0, 1.0, 1.0);
-     creerSnake(creer_point(Z,0,0),0);
+    //afficher_cube(-1.0, -1.0, -1.0, 1.0, 1.0, 1.0);  
+     fprintf(stderr,"avant creer boucle main \n");
+     afficherSnake(serpent);
      Z+=0.5;
      if(Z==30.0)Z=0;
+     fprintf(stderr,"passer boucle main \n");
     // envoie des donnees
     glFlush();
     
@@ -289,7 +291,7 @@ void afficher_cube(int x1,int y1,int z1, int x2, int y2, int z2){
 
 
 void quadrillage(){
-	int i,j;
+	int i;
 	
 	//glColor3f(0, 0, 0.9);
 	for(i=-LARGEUR;i<=LARGEUR;i++){
