@@ -31,7 +31,7 @@ file enfile(file f, element el){
     struct_cellule* nouvelle_fin;
     struct_cellule* tmp;
     tmp =allocation_memoire(1,sizeof(struct_cellule));
-    fprintf(stderr,"ici\n");
+    fprintf(stderr,"ici donction file\n");
     nouvelle_fin=allocation_memoire(1,sizeof(struct_cellule));
     nouvelle_fin->objet=el;
     nouvelle_fin->suivant=NULL;
@@ -92,10 +92,10 @@ void afficher_file(file f){
     fprintf(stdout,"< ");
     tmp=f->debut_file;
     while(tmp->suivant!=NULL){
-      fprintf(stdout,"%d , ",tmp->objet);
+    //  fprintf(stdout,"%d , ",tmp->objet);
       tmp=tmp->suivant;
     }
-    fprintf(stdout,"%d > \n",tmp->objet);
+    //fprintf(stdout,"%d > \n",tmp->objet);
   }
   else{
     fprintf(stdout,"< file vide >");

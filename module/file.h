@@ -2,7 +2,7 @@
 #define MON_H_FILE
 #include "../point.h"
 
-typedef point element;
+typedef point* element;
 
 typedef struct cellule{
   element objet;
