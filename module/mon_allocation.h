@@ -1,6 +1,6 @@
 #ifndef MON_H_ALLOCATION
 #define MON_H_ALLOCATION
-
+#include <stddef.h>
 /***************************
  *fonction : void erreur(char* arguments ,...)
  ** signale l'erreur en cas de probleme d'allocation de la fonction allocation_memoire

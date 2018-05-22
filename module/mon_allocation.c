@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
+#include "mon_allocation.h"
+
 void erreur(char* arguments ,...){
   va_list liste;
   va_start(liste,arguments);
