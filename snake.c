@@ -27,7 +27,7 @@ void creerFace(point* A,point* B,point* C,point* D){
 	glEnd();
 
 }
-void creerSphere(int rayon,point* position,float pas){
+void afficherSphere(int rayon,point* position,float pas){
 	float deltaO = (2*PI)/(float)pas;
 	float deltaL = deltaO;
 	float teta,phy;
@@ -71,35 +71,38 @@ void creerBoudin(point* tete,int axe){
 }*/
 
 snake* creerSnake(point* tete,int axe){
-	int i ,decalageAxeX=0,decalageAxeY=0,decalageAxeZ=0;
+	int i=0 ,decalageAxeX=0,decalageAxeY=0,decalageAxeZ=0;
 	point* tmp;
 	snake* serpent = allocation_memoire(1,sizeof(snake));
-	serpent->corps = enfile(serpent->corps,tete);
+
 	
 	if(axe==AXE_X){
-	        for(i=0;i<5;i++){
+			decalageAxeX+=2*TAILLE;
+	        for(i=1;i<TAILLE;i++){
 		       tmp = creer_point(getX(tete)+decalageAxeX,getY(tete),getZ(tete));
 		       serpent->corps = enfile(serpent->corps,tmp);
-		       decalageAxeX+=2;
+		       decalageAxeX-=2;
 	        }
 	}
 	if(axe==AXE_Y){
-	        for(i=0;i<5;i++){
+			decalageAxeY+=2*TAILLE;
+	        for(i=1;i<TAILLE;i++){
 	               tmp = creer_point(getX(tete),getY(tete)+decalageAxeY,getZ(tete));
 		       serpent->corps = enfile(serpent->corps,tmp);
 		       
-		        decalageAxeY+=2;
+		        decalageAxeY-=2;
 	        }
 	}
 	if(axe==AXE_Z){
-	        for(i=0;i<5;i++){
+			decalageAxeZ+=2*TAILLE;
+	        for(i=1;i<TAILLE;i++){
 	               tmp = creer_point(getX(tete),getY(tete),getZ(tete)+decalageAxeZ);
 		       serpent->corps = enfile(serpent->corps,tmp);
 		   
-		       decalageAxeZ+=2;
+		       decalageAxeZ-=2;
 	        }
 	}
-	
+    serpent->corps = enfile(serpent->corps,tete);
 	return serpent;
 }
 
@@ -107,7 +110,7 @@ void afficherSnake(snake* serpent){
         struct_cellule* iterateur = serpent->corps->debut_file;
         
         while(iterateur != NULL){
-            creerSphere(2,iterateur->objet,20);
+            afficherSphere(2,iterateur->objet,20);
             iterateur = iterateur->suivant;
         }
 }
@@ -118,6 +121,6 @@ void deplacerSnake(snake* serpent,char direction,int axe_direction,int axe2){
 
 }
 
-}
+
 
 
