@@ -4,8 +4,8 @@
 #include "GL/gl.h"
 #include "GL/glut.h"
 
-
 #include "snake.h"
+#include "define.h"
 #define PI 3.14156
 
 void creerFace(point* A,point* B,point* C,point* D){
@@ -45,13 +45,75 @@ void creerSphere(int rayon,point* position,float pas){
 		}
 	}fprintf(stderr,"ici fini\n");
 }
-
-void creerSnake(point* tete,int axe){
-	int i ,decalageAxeX=0;
-	for(i=0;i<5;i++){
-		creerSphere(2,creer_point(getX(tete)+decalageAxeX,getY(tete),getZ(tete)),20);
-		decalageAxeX+=2;
+/*
+void creerBoudin(point* tete,int axe){
+	int i ,decalageAxeX=0,decalageAxeY=0,decalageAxeZ=0;;
+	if(axe==0){
+	        for(i=0;i<5;i++){
+		        creerSphere(2,creer_point(getX(tete)+decalageAxeX,getY(tete),getZ(tete)),20);
+		        decalageAxeX+=2;
+	        }
 	}
+	if(axe==1){
+	        for(i=0;i<5;i++){
+		        creerSphere(2,creer_point(getX(tete),getY(tete)+decalageAxeY,getZ(tete)),20);
+		        decalageAxeY+=2;
+	        }
+	}
+	if(axe==2){
+	        for(i=0;i<5;i++){
+		        creerSphere(2,creer_point(getX(tete),getY(tete),getZ(tete)+decalageAxeZ),20);
+		        decalageAxeZ+=2;
+	        }
+	}
+}*/
 
+snake* creerSnake(point* tete,int axe){
+	int i ,decalageAxeX=0,decalageAxeY=0,decalageAxeZ=0;
+	point* tmp;
+	snake* serpent = allocation_memoire(1,sizeof(snake));
+	serpent->corps = enfile(serpent->corps,tete);
+	
+	if(axe==AXE_X){
+	        for(i=0;i<5;i++){
+		       tmp = creer_point(getX(tete)+decalageAxeX,getY(tete),getZ(tete));
+		       serpent->corps = enfile(serpent->corps,tmp);
+		       decalageAxeX+=2;
+	        }
+	}
+	if(axe==AXE_Y){
+	        for(i=0;i<5;i++){
+	               tmp = creer_point(getX(tete),getY(tete)+decalageAxeY,getZ(tete));
+		       serpent->corps = enfile(serpent->corps,tmp);
+		       
+		        decalageAxeY+=2;
+	        }
+	}
+	if(axe==AXE_Z){
+	        for(i=0;i<5;i++){
+	               tmp = creer_point(getX(tete),getY(tete),getZ(tete)+decalageAxeZ);
+		       serpent->corps = enfile(serpent->corps,tmp);
+		   
+		       decalageAxeZ+=2;
+	        }
+	}
+	
+	return serpent;
+}
+
+void afficherSnake(snake* serpent){
+        struct_cellule* iterateur = serpent->corps->debut_file;
+        
+        while(iterateur != NULL){
+            creerSphere(2,iterateur->objet,20);
+            iterateur = iterateur->suivant;
+        }
+}
+
+void deplacerSnake(snake* serpent,char direction,int axe_direction,int axe2){
+
+
+
+}
 
 }
