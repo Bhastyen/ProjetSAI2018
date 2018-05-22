@@ -4,6 +4,7 @@
 #include "GL/gl.h"
 #include "GL/glut.h"
 
+#include "camera.h"
 #include "paraRectangle.h"
 #include "snake.h"
 
@@ -14,7 +15,7 @@
 
 
 
-int sens = 1;
+/*int sens = 1;
 
 float vitesse_camera = 1.0f;
 float theta = 0.0f; float phi = 0.0f;
@@ -23,9 +24,10 @@ float vuex = 0.0; float vuey = 0.0; float vuez = 0.0;
 float ciblex = 0.0; float cibley = 0.0; float ciblez = 0.0;
 float deplLateralx = 0.0f; float deplLateraly = 0.0f; float deplLateralz = 0.0f;
 
-int xRel = 0, yRel = 0; int xOld = 0, yOld = 0;
+int xRel = 0, yRel = 0; int xOld = 0, yOld = 0;*/
 
 
+camera* c;
 para* p;
 
 
@@ -39,6 +41,10 @@ void afficher_cube(int x1,int y1,int z1, int x2, int y2, int z2);
 float Z = 0;
 int main(int argc, char* argv[]){
 
+    // creation de la camera
+    c = creer_camera(5, 5, 5, 1, 1); // posx, posy, posz, vitesse, sensibilite
+    
+    // creation de l'environnement
     p = creer_para(2.0, 2.0, 2.0, 20.0, 20.0, 3.0);
     
     // initialisation de glut
@@ -80,12 +86,14 @@ void Affichage(){
     glLoadIdentity();
     
     // creation du volume de projection (Frustum)
-    //glperpective(90, 90);
+    //gluPerspective(90, 90, 1, 50);
     glFrustum(-5, 5, -5, 5, 3, 50);
     // creation de la camera
     //gluLookAt(5*cos(theta*(PI/180.0)), 10*sin(theta*(PI/180.0)), 20, 0, 0, 0, 0, 0, 1);
-    gluLookAt(posx, posy, posz, ciblex, cibley, ciblez, 0, 0, 1);    //, 30, posy,
-    
+    if (c->type == CAMERA_LIBRE)
+        gluLookAt(getX(c->l_pos), getY(c->l_pos), getZ(c->l_pos), getX(c->l_cible), getY(c->l_cible), getZ(c->l_cible), 0, 0, 1);  
+    else gluLookAt(getX(c->s_pos), getY(c->s_pos), getZ(c->s_pos), getX(c->s_cible), getY(c->s_cible), getZ(c->s_cible), 0, 0, 1);
+        
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     
@@ -94,6 +102,7 @@ void Affichage(){
     
     // envoie des points pour le cube
     draw_para(p);
+    
     //afficher_cube(-1.0, -1.0, -1.0, 1.0, 1.0, 1.0);
      creerSnake(creer_point(Z,0,0),0);
      Z+=0.5;
@@ -106,9 +115,9 @@ void Affichage(){
 }
 
 
-void gestionClavier(unsigned char c, int x, int y){
+void gestionClavier(unsigned char ch, int x, int y){
     
-    if (c == 'z'){
+    /*if (c == 'z'){
         // mise a jour de la position de la camera: avance en direction du point cible
         posx += vuex*vitesse_camera;
         posy += vuey*vitesse_camera; 
@@ -154,13 +163,28 @@ void gestionClavier(unsigned char c, int x, int y){
         ciblex = posx+vuex;
         cibley = posy+vuey;
         ciblez = posz+vuez;
-    }
+    }*/
     
+    if (ch == 'z')
+        deplacement(c, 'h');
+    if (ch == 's')
+        deplacement(c, 'b');
+    if (ch == 'q')
+        deplacement(c, 'g');
+    if (ch == 'd')
+        deplacement(c, 'd');
+        
+    if (ch == 'f')
+        change_camera(c);
+        
 }
 
 
 void gestionSouris(int x, int y){
-    float vitesse = 0.3;
+    
+    orientation(c, x, y);
+    
+    /*float vitesse = 0.3;
     float norme;
     
     // calcul des coordonnees relative de la souris: difference entre les nouvelles coordonnees et les anciennes 
@@ -212,7 +236,7 @@ void gestionSouris(int x, int y){
     // calcul le nouveau point cible
     ciblex = posx+vuex; 
     cibley = posy+vuey; 
-    ciblez = posz+vuez;
+    ciblez = posz+vuez;*/
     
 }
 

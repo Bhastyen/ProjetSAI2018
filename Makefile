@@ -5,8 +5,8 @@ OPTION=-Wall
 all: app clean
 
 
-app: main.c mon_allocation.o point.o file.o  paraRectangle.o snake.o
-	$(CC) $(OPTION) main.c mon_allocation.o point.o file.o paraRectangle.o snake.o -o app -lglut -lGLU -lGL -lm
+app: main.c mon_allocation.o point.o file.o  paraRectangle.o snake.o camera.o
+	$(CC) $(OPTION) main.c mon_allocation.o point.o file.o paraRectangle.o snake.o camera.o -o app -lglut -lGLU -lGL -lm
 
 mon_allocation.o: ./module/mon_allocation.c ./module/mon_allocation.h
 	$(CC) $(OPTION) -c ./module/mon_allocation.c -o mon_allocation.o
@@ -25,6 +25,9 @@ paraRectangle.o: paraRectangle.c paraRectangle.h
 
 snake.o: snake.c snake.h
 	$(CC) $(OPTION) -c snake.c snake.h
+
+camera.o: camera.c camera.h
+	$(CC) $(OPTION) -c camera.c
 
 clean:
 	rm -f *.o *~

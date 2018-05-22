@@ -8,6 +8,8 @@
 #include "define.h"
 #define PI 3.14156
 
+
+
 void creerFace(point* A,point* B,point* C,point* D){
 	fprintf(stderr,"A %f %f %f\n",getX(A),getY(A),getZ(A));
 	fprintf(stderr,"B %f %f %f\n",getX(B),getY(B),getZ(B));
@@ -117,3 +119,5 @@ void deplacerSnake(snake* serpent,char direction,int axe_direction,int axe2){
 }
 
 }
+
+
