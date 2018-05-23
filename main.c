@@ -10,8 +10,7 @@
 #include "labyrinthe.h"
 
 #define PI 3.14156
-#define LARGEUR 10
-#define HAUTEUR 10
+
 
 
 
@@ -31,7 +30,8 @@ int xRel = 0, yRel = 0; int xOld = 0, yOld = 0;*/
 camera* c;
 para* p;
 snake* serpent;
-piece liste_pieces[63];
+piece_laby liste_pieces[LARGEUR*HAUTEUR*PROFONDEUR];
+
 
 void gestionClavier(unsigned char c, int x, int y);
 void gestionSouris(int x, int y);
@@ -53,8 +53,7 @@ int main(int argc, char* argv[]){
     serpent = creerSnake(pt,0);
     afficherSphere(2,pt,20);
     afficherSphere(5,pt2,10);
-    initilisation_type_piece(liste_pieces);
-    
+  	creer_labyrinthe(liste_pieces);
     
     // initialisation de glut
     glutInit(&argc, argv);
@@ -113,9 +112,9 @@ void Affichage(){
     draw_para(p);
     
     //afficher_cube(-1.0, -1.0, -1.0, 1.0, 1.0, 1.0);  
-     
+     afficher_labyrinthe(liste_pieces);
      afficherSnake(serpent);
-     visualiser_type_piece(liste_pieces[42]);
+    // visualiser_type_piece(liste_pieces[42]);
      Z+=0.5;
      if(Z==30.0)Z=0;
    
