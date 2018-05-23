@@ -11,10 +11,10 @@
 
 
 void creerFace(point* A,point* B,point* C,point* D){
-	fprintf(stderr,"A %f %f %f\n",getX(A),getY(A),getZ(A));
+	/*fprintf(stderr,"A %f %f %f\n",getX(A),getY(A),getZ(A));
 	fprintf(stderr,"B %f %f %f\n",getX(B),getY(B),getZ(B));
 	fprintf(stderr,"C %f %f %f\n",getX(C),getY(C),getZ(C));
-	fprintf(stderr,"D %f %f %f\n",getX(D),getY(D),getZ(D));
+	fprintf(stderr,"D %f %f %f\n",getX(D),getY(D),getZ(D));*/
     glBegin(GL_QUADS);
 
     // jaune
@@ -32,7 +32,7 @@ void afficherSphere(int rayon,point* position,float pas){
 	float deltaL = deltaO;
 	float teta,phy;
 	for(teta =0; teta < 2*PI ; teta+=deltaO){
-		for(phy = 0 ; phy < PI/2 ; phy+=deltaL){fprintf(stderr,"deltaO %f teta %f phy %f\n",deltaO,teta,phy);
+		for(phy = 0 ; phy < PI/2 ; phy+=deltaL){
 			creerFace(creer_point_angle_pos(teta,phy,rayon,position),
 					  creer_point_angle_pos(teta+deltaO,phy,rayon,position),
 					  creer_point_angle_pos(teta+deltaO,phy+deltaL,rayon,position),
@@ -72,14 +72,15 @@ void creerBoudin(point* tete,int axe){
 
 snake* creerSnake(point* tete,int axe){
 	int i=0 ,decalageAxeX=0,decalageAxeY=0,decalageAxeZ=0;
-	point* tmp;
+	
 	snake* serpent = allocation_memoire(1,sizeof(snake));
-
+	element obj ,tmp;
+	obj.p = tete;
 	
 	if(axe==AXE_X){
 			decalageAxeX+=2*TAILLE;
 	        for(i=1;i<TAILLE;i++){
-		       tmp = creer_point(getX(tete)+decalageAxeX,getY(tete),getZ(tete));
+		       tmp.p = creer_point(getX(tete)+decalageAxeX,getY(tete),getZ(tete));
 		       serpent->corps = enfile(serpent->corps,tmp);
 		       decalageAxeX-=2;
 	        }
@@ -87,7 +88,7 @@ snake* creerSnake(point* tete,int axe){
 	if(axe==AXE_Y){
 			decalageAxeY+=2*TAILLE;
 	        for(i=1;i<TAILLE;i++){
-	               tmp = creer_point(getX(tete),getY(tete)+decalageAxeY,getZ(tete));
+	               tmp.p = creer_point(getX(tete),getY(tete)+decalageAxeY,getZ(tete));
 		       serpent->corps = enfile(serpent->corps,tmp);
 		       
 		        decalageAxeY-=2;
@@ -96,13 +97,13 @@ snake* creerSnake(point* tete,int axe){
 	if(axe==AXE_Z){
 			decalageAxeZ+=2*TAILLE;
 	        for(i=1;i<TAILLE;i++){
-	               tmp = creer_point(getX(tete),getY(tete),getZ(tete)+decalageAxeZ);
+	               tmp.p = creer_point(getX(tete),getY(tete),getZ(tete)+decalageAxeZ);
 		       serpent->corps = enfile(serpent->corps,tmp);
 		   
 		       decalageAxeZ-=2;
 	        }
 	}
-    serpent->corps = enfile(serpent->corps,tete);
+    serpent->corps = enfile(serpent->corps,obj);
 	return serpent;
 }
 
@@ -110,7 +111,7 @@ void afficherSnake(snake* serpent){
         struct_cellule* iterateur = serpent->corps->debut_file;
         
         while(iterateur != NULL){
-            afficherSphere(2,iterateur->objet,20);
+            afficherSphere(2,iterateur->objet.p,20);
             iterateur = iterateur->suivant;
         }
 }
