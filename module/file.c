@@ -67,7 +67,7 @@ element defile ( file f){
   
   if(f->fin_file == f->debut_file){ // cas un seul element
     nombre=f->fin_file->objet;
-    fprintf(stderr,"1 %p %p \n",f->debut_file,f->fin_file);
+   // fprintf(stderr,"1 %p %p \n",f->debut_file,f->fin_file);
     f->debut_file=NULL;
     f->fin_file=NULL;
     // free(f->debut_file);
