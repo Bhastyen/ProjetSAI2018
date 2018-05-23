@@ -1,12 +1,13 @@
 CC=gcc
-OPTION=-Wall
+OPTION=-Wall -g
 
 
 all: app clean
 
 
-app: main.c mon_allocation.o point.o file.o  paraRectangle.o snake.o camera.o
-	$(CC) $(OPTION) main.c mon_allocation.o point.o file.o paraRectangle.o snake.o camera.o -o app -lglut -lGLU -lGL -lm
+app: main.c mon_allocation.o point.o file.o  paraRectangle.o snake.o camera.o labyrinthe.o 
+
+	$(CC) $(OPTION) main.c mon_allocation.o point.o file.o  paraRectangle.o snake.o camera.o labyrinthe.o -o app -lglut -lGLU -lGL -lm
 
 mon_allocation.o: ./module/mon_allocation.c ./module/mon_allocation.h
 	$(CC) $(OPTION) -c ./module/mon_allocation.c -o mon_allocation.o
@@ -28,6 +29,9 @@ snake.o: snake.c snake.h
 
 camera.o: camera.c camera.h
 	$(CC) $(OPTION) -c camera.c
+
+labyrinthe.o: labyrinthe.c labyrinthe.h
+	$(CC) $(OPTION) -c labyrinthe.c labyrinthe.h
 
 clean:
 	rm -f *.o *~
