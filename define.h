@@ -6,7 +6,10 @@
 #define AXE_Z 2
 #define TAILLE 5
 #define TAILLE_PIECE 10
-#define HAUTEUR 10
-#define LARGEUR 10
-#define PROFONDEUR 10
+#define HAUTEUR 3
+#define LARGEUR 3
+#define PROFONDEUR 3
+#define NOMBRE_PIECE 20
+#define VUE 10
+#define NON_VUE 0
 #endif
