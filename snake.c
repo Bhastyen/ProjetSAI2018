@@ -45,7 +45,7 @@ void afficherSphere(int rayon,point* position,float pas){
 					  creer_point_angle_pos(teta,-phy-deltaL,rayon,position));
 		
 		}
-	}fprintf(stderr,"ici fini\n");
+	}
 }
 /*
 void creerBoudin(point* tete,int axe){
