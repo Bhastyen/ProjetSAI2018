@@ -7,6 +7,7 @@
 #include "camera.h"
 #include "paraRectangle.h"
 #include "snake.h"
+#include "labyrinthe.h"
 
 #define PI 3.14156
 #define LARGEUR 10
@@ -30,6 +31,7 @@ int xRel = 0, yRel = 0; int xOld = 0, yOld = 0;*/
 camera* c;
 para* p;
 snake* serpent;
+piece liste_pieces[63];
 
 void gestionClavier(unsigned char c, int x, int y);
 void gestionSouris(int x, int y);
@@ -40,13 +42,20 @@ void afficher_cube(int x1,int y1,int z1, int x2, int y2, int z2);
 
 float Z = 0;
 int main(int argc, char* argv[]){
-
+    point* pt =creer_point(Z,0,0);   
+    
+    point* pt2 =creer_point(10,0,0);
     // creation de la camera
     c = creer_camera(5, 5, 5, 1, 1); // posx, posy, posz, vitesse, sensibilite
     
     // creation de l'environnement
     p = creer_para(2.0, 2.0, 2.0, 20.0, 20.0, 3.0);
-    serpent = creerSnake(creer_point(Z,0,0),0);
+    serpent = creerSnake(pt,0);
+    afficherSphere(2,pt,20);
+    afficherSphere(5,pt2,10);
+    initilisation_type_piece(liste_pieces);
+    
+    
     // initialisation de glut
     glutInit(&argc, argv);
     // initialisation du mode d'affichage
@@ -104,11 +113,12 @@ void Affichage(){
     draw_para(p);
     
     //afficher_cube(-1.0, -1.0, -1.0, 1.0, 1.0, 1.0);  
-     fprintf(stderr,"avant creer boucle main \n");
+     
      afficherSnake(serpent);
+     visualiser_type_piece(liste_pieces[42]);
      Z+=0.5;
      if(Z==30.0)Z=0;
-     fprintf(stderr,"passer boucle main \n");
+   
     // envoie des donnees
     glFlush();
     
