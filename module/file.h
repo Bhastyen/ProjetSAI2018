@@ -10,6 +10,7 @@ typedef struct {
 typedef union {
 	point* p ;
 	type_objet* o;
+	int indice;
 } element;
 
 typedef struct cellule{
