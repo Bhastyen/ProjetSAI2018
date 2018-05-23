@@ -57,6 +57,13 @@ file vider_file(file f);
 element defile ( file f);
 
 /****************************
+ *fonction : element dernier_file(file f)
+ ** renvoie le dernier element de la file
+
+ ***************************/
+element dernier_file ( file f);
+
+/****************************
  *fonction : void afficher_file(file f)
  ** Affiche la file
 

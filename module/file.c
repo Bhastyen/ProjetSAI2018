@@ -24,14 +24,14 @@ file enfile(file f, element el){
     debut->suivant=NULL;
     nouveau->fin_file=debut;
     nouveau->debut_file=debut;
-     fprintf(stderr,"la \n");
+     //fprintf(stderr,"la \n");
     return nouveau;
   }
   else{
     struct_cellule* nouvelle_fin;
     struct_cellule* tmp;
     tmp =allocation_memoire(1,sizeof(struct_cellule));
-    fprintf(stderr,"ici donction file\n");
+    //fprintf(stderr,"ici donction file\n");
     nouvelle_fin=allocation_memoire(1,sizeof(struct_cellule));
     nouvelle_fin->objet=el;
     nouvelle_fin->suivant=NULL;
@@ -50,6 +50,7 @@ file vider_file(file f){
   return f2;
 
 }
+
 element defile ( file f){
   element nombre;
   struct_cellule* nouveau_debut;
@@ -84,7 +85,9 @@ element defile ( file f){
 
 }
 
-  
+element dernier_file(file f){
+    return f->fin_file->objet;
+}
 
 void afficher_file(file f){
   struct_cellule* tmp;
