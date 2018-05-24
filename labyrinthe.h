@@ -13,6 +13,7 @@ typedef struct {
   int murs[6];
   file adjacent;
   int longueur_chemin;
+  int point_entree;
 } piece_laby;
 
 typedef struct {
@@ -43,15 +44,19 @@ void determine_i_k_j(int indice,int* i,int* k,int* j);
 
 int calcul_indice(int i,int k,int j);
 
-void calcul_position_point(int indice,point* p);
 
-int adjacence_piece(piece_laby piece_courante,
-		    int indice,
+void calcul_position_point(int indice,piece_laby* p);
+int adjacence_piece(int indice,
 		    piece_laby liste_piece[LARGEUR*HAUTEUR*PROFONDEUR],
 		    piece liste_types_pieces[63],
 		    int laby[LARGEUR][HAUTEUR][PROFONDEUR],
-		    file candidats);
+		    file* candidats);
 		 
 void visualiser_piece_laby(piece_laby  p);
-void afficher_labyrinthe(piece_laby liste_pieces[LARGEUR*HAUTEUR*PROFONDEUR]);
+
+void afficher_labyrinthe(file pieces_a_afficher,piece_laby liste_pieces[LARGEUR*HAUTEUR*PROFONDEUR]);
+
+file file_piece_a_afficher_labyrinthe(piece_laby liste_pieces[LARGEUR*HAUTEUR*PROFONDEUR]);
+
+void visualiser_piece_laby_final(piece_laby p );
 #endif
