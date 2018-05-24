@@ -9,6 +9,9 @@
 #include "snake.h"
 #include "labyrinthe.h"
 
+#include "define.h"
+#include <stdbool.h>
+
 #define PI 3.14156
 
 
@@ -31,6 +34,7 @@ camera* c;
 para* p;
 snake* serpent;
 piece_laby liste_pieces[LARGEUR*HAUTEUR*PROFONDEUR];
+file pieces_a_afficher;
 
 
 void gestionClavier(unsigned char c, int x, int y);
@@ -42,6 +46,23 @@ void afficher_cube(int x1,int y1,int z1, int x2, int y2, int z2);
 
 float Z = 0;
 int main(int argc, char* argv[]){
+  /*	glEnable(GL_DEPTH_TEST);
+  	glGenTextures(1,&texture1);
+	glBindTexture(GL_TEXTURE_2D,texture1);
+	glEnable(GL_TEXTURE_2D);
+	glTexImage2D (
+			GL_TEXTURE_2D, 	//Type : texture 2D
+			0, 	//Mipmap : aucun
+			4, 	//Couleurs : 4
+			2, 	//Largeur : 2
+			2, 	//Hauteur : 2
+			0, 	//Largeur du bord : 0
+			GL_RGBA, 	//Format : RGBA
+			GL_UNSIGNED_BYTE, 	//Type des couleurs
+			"./texture/herbe.jpg"	//Addresse de l'image
+	); 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);*/
     point* pt =creer_point(Z,0,0);   
     
     point* pt2 =creer_point(10,0,0);
@@ -50,11 +71,15 @@ int main(int argc, char* argv[]){
     
     // creation de l'environnement
     p = creer_para(2.0, 2.0, 2.0, 20.0, 20.0, 3.0);
-    serpent = creerSnake(pt,0);
+   // serpent = creerSnake(pt,0);
     afficherSphere(2,pt,20);
     afficherSphere(5,pt2,10);
-  	creer_labyrinthe(liste_pieces);
     
+    /*Gestion labyrinthe*/
+  	creer_labyrinthe(liste_pieces);
+  	
+  	/*instancie la file de piece a afficher*/
+    pieces_a_afficher = file_piece_a_afficher_labyrinthe(liste_pieces);
     // initialisation de glut
     glutInit(&argc, argv);
     // initialisation du mode d'affichage
@@ -109,11 +134,12 @@ void Affichage(){
     quadrillage();
     
     // envoie des points pour le cube
-    draw_para(p);
+   // draw_para(p);
     
-    //afficher_cube(-1.0, -1.0, -1.0, 1.0, 1.0, 1.0);  
-     afficher_labyrinthe(liste_pieces);
-     afficherSnake(serpent);
+    //afficher_cube(-1.0, -1.0, -1.0, 1.0, 1.0, 1.0); 
+    	afficherSphere(1,creer_point(0,0,0),20); 
+     afficher_labyrinthe(pieces_a_afficher,liste_pieces);
+     //afficherSnake(serpent);
     // visualiser_type_piece(liste_pieces[42]);
      Z+=0.5;
      if(Z==30.0)Z=0;
