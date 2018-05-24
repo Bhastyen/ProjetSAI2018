@@ -28,40 +28,42 @@ void draw_para(para* p){
 
     glBegin(GL_QUADS);
 
-    // jaune
+    // jaune: sol
 	glColor3f(0.9, 0.9, 0);
 	glVertex3f(x1, y1, z1);
 	glVertex3f(x2, y1, z1);
     glVertex3f(x2, y2, z1);
 	glVertex3f(x1, y2, z1);
 
-
+    // turquoise: mur avant
 	glColor3f(0, 0.9, 0.9);
 	glVertex3f(x1, y1, z2);
 	glVertex3f(x1, y1, z1);
     glVertex3f(x2, y1, z1);
 	glVertex3f(x2, y1, z2);
 
+    // violet: mur gauche
 	glColor3f(0.9, 0, 0.9);
 	glVertex3f(x2, y1, z2);
 	glVertex3f(x2, y2 ,z2);
     glVertex3f(x2, y2, z1);
 	glVertex3f(x2, y1, z1);
 
-	// bleu
+	// bleu: plafond
 	glColor3f(0, 0, 0.9);
 	glVertex3f(x1, y1, z2);
 	glVertex3f(x1, y2, z2);
 	glVertex3f(x2, y2, z2);
 	glVertex3f(x2, y1, z2);
-	// vert
+	
+	// vert: mur droit
 	glColor3f(0, 0.9, 0);
 	glVertex3f(x1, y1, z2);
 	glVertex3f(x1, y2, z2);
 	glVertex3f(x1, y2, z1);
 	glVertex3f(x1, y1, z1);
 
-	//rouge
+	//rouge: mur arriere
 	glColor3f(0.9, 0, 0);
 	glVertex3f(x1, y2, z2);
 	glVertex3f(x2, y2, z2);

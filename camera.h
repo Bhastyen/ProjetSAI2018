@@ -5,6 +5,7 @@
 #define CAMERA_LIBRE 2
 
 #include "point.h"
+#include "define.h"
 
 
 typedef struct {
@@ -24,6 +25,10 @@ typedef struct {
     
     // valeur de deplacement de la souris
     int xRel, yRel; int xOld, yOld;
+    
+    // tableau definissant la position de la camera du serpent suivant la face du serpent
+    int positions[6];
+    int axe_verticales[3];
     
 } camera;
 

@@ -3,6 +3,7 @@
 
 #include "./module/file.h"
 #include "./module/mon_allocation.h"
+#include "paraRectangle.h"
 
 typedef struct{
   // file de point pour le corps 
@@ -14,8 +15,9 @@ typedef struct{
   float vitesse;
   
   // orientation du serpent
-  int directions[3][6];
+  int directions[6][6];
   int redirection[6][3];
+  int transition[3][6];
   point* axes[6];
   
   // info
@@ -26,8 +28,9 @@ typedef struct{
 
 
 snake* creerSnake(point* tete,int axe);
-int deplacerSnake(snake* serpent, char direction);
+int deplacerSnake(snake* serpent, para* p, char direction);
 int collision_serpent(file corps, point* tete, int rayon);
+int collision_mur(point* tete, para* p, int rayon, int correction[2], int face_exeption);
 
 void creerBoudin(point* tete,int axe);
 

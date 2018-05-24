@@ -89,6 +89,22 @@ element dernier_file(file f){
     return f->fin_file->objet;
 }
 
+
+element element_file(file f, int pos){
+    int c = 0;
+    struct_cellule* cel = f->debut_file;
+    
+    while (cel != NULL){
+        if (c == pos)
+            return cel->objet;
+        cel = cel->suivant;
+        c ++;
+    }
+ 
+    return NULL;
+}
+
+
 void afficher_file(file f){
   struct_cellule* tmp;
   if(f->debut_file!=NULL){

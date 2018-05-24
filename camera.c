@@ -9,6 +9,9 @@
 #define PI 3.14156
 
 
+void init_positions(int positions[6]);
+void init_axe_verticales(int axe_verticales[3]);
+
 
 camera* creer_camera(float x, float y, float z, float vitesse, float sensibilite){
     camera* c = (camera*) malloc(sizeof(camera));
@@ -40,6 +43,10 @@ camera* creer_camera(float x, float y, float z, float vitesse, float sensibilite
     
     // valeur de deplacement de la souris
     c->xRel = 0; c->yRel = 0; c->xOld = 0; c->yOld = 0;
+    
+    // remplissage de la table
+    init_positions(c->positions);
+    init_axe_verticales(c->axe_verticales);
 
     return c;
 }
@@ -101,47 +108,6 @@ void l_deplacement(camera* c, char direction){
 
 
 void s_deplacement(camera* c, char direction){
-    switch (direction){
-    
-        case 'h':
-            // mise a jour de la position de la camera: avance en direction du point cible
-            setX(c->s_pos, getX(c->s_pos)+getX(c->s_vue)*c->vitesse);
-            setY(c->s_pos, getY(c->s_pos)+getY(c->s_vue)*c->vitesse);
-            setZ(c->s_pos, getZ(c->s_pos)+getZ(c->s_vue)*c->vitesse);
-            
-            // mise a jour du point cible par la camera
-            setX(c->s_cible, getX(c->s_vue)+getX(c->s_pos));
-            setY(c->s_cible, getY(c->s_vue)+getY(c->s_pos));
-            setZ(c->s_cible, getZ(c->s_vue)+getZ(c->s_pos));
-            break;
-        case 'b':
-            // si le serpent veut reculer on ne fait rien
-            break;
-        case 'g':
-            // mise a jour de la position de la camera: inverse du deplacement lateral par rapport vecteur vue (la normal du plan (vue, axe_vertical))
-            setX(c->s_pos, getX(c->s_pos)-getX(c->s_deplLateral)*c->vitesse); 
-            setY(c->s_pos, getY(c->s_pos)-getY(c->s_deplLateral)*c->vitesse);
-            setZ(c->s_pos, getZ(c->s_pos)-getZ(c->s_deplLateral)*c->vitesse);
-            
-            // mise a jour du point cible par la camera
-            setX(c->s_cible, getX(c->s_vue)+getX(c->s_pos));
-            setY(c->s_cible, getY(c->s_vue)+getY(c->s_pos));
-            setZ(c->s_cible, getZ(c->s_vue)+getZ(c->s_pos));
-            break;
-        case 'd':
-            // mise a jour de la position de la camera: deplacement lateral par rapport au vecteur vue (la normal du plan (vue, axe_vertical))
-            setX(c->s_pos, getX(c->s_pos)+getX(c->s_deplLateral)*c->vitesse); 
-            setY(c->s_pos, getY(c->s_pos)+getY(c->s_deplLateral)*c->vitesse);
-            setZ(c->s_pos, getZ(c->s_pos)+getZ(c->s_deplLateral)*c->vitesse);
-            
-            // mise a jour du point cible par la camera
-            setX(c->s_cible, getX(c->s_vue)+getX(c->s_pos));
-            setY(c->s_cible, getY(c->s_vue)+getY(c->s_pos));
-            setZ(c->s_cible, getZ(c->s_vue)+getZ(c->s_pos));
-            break;
-        default: 
-            break;
-    }
     
 }
 
@@ -163,11 +129,11 @@ void change_camera(camera* c){
         c->type = CAMERA_LIBRE;
         
         // se place au meme endroit que la camera serpent
-        c->l_phi = c->s_phi; c->l_theta = c->s_theta;
+        /*c->l_phi = c->s_phi; c->l_theta = c->s_theta;
         c->l_pos->x = c->s_pos->x; c->l_pos->y = c->s_pos->y; c->l_pos->z = c->s_pos->z;
         c->l_vue->x = c->s_vue->x; c->l_vue->y = c->s_vue->y; c->l_vue->z = c->s_vue->z;
         c->l_cible->x = c->s_cible->x; c->l_cible->y = c->s_cible->y; c->l_cible->z = c->s_cible->z;
-        c->l_deplLateral->x = c->s_deplLateral->x; c->l_deplLateral->y = c->s_deplLateral->y; c->l_deplLateral->z = c->s_deplLateral->z;            
+        c->l_deplLateral->x = c->s_deplLateral->x; c->l_deplLateral->y = c->s_deplLateral->y; c->l_deplLateral->z = c->s_deplLateral->z;    */        
     }
 
 }
@@ -252,4 +218,25 @@ void orientation(camera* c, int x, int y){
 }
 
 
+void init_positions(int positions[6]){
+    positions[SOL] = AXE_Z;
+    positions[PLAFOND] = AXE_Z_BIS;
+    positions[MUR_A] = AXE_Y;
+    positions[MUR_AR] = AXE_Y_BIS;
+    positions[MUR_G] = AXE_X;
+    positions[MUR_D] = AXE_X_BIS;
+}
+
+
+
+void init_axe_verticales(int axe_verticales[3]){
+    axe_verticales[SOL] = AXE_Z;
+    axe_verticales[PLAFOND] = AXE_Z_BIS;
+    axe_verticales[MUR_G] = AXE_X;
+    axe_verticales[MUR_D] = AXE_X_BIS;
+    axe_verticales[MUR_A] = AXE_Y;
+    axe_verticales[MUR_AR] = AXE_Y_BIS;
+}
+    
+    
 

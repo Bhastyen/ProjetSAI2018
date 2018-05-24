@@ -64,6 +64,13 @@ element defile ( file f);
 element dernier_file ( file f);
 
 /****************************
+ *fonction : element element_file(file f, int pos)
+ ** renvoie l'element a la position pos de la file
+
+ ***************************/
+element element_file(file f, int pos);
+
+/****************************
  *fonction : void afficher_file(file f)
  ** Affiche la file
 

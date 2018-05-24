@@ -6,6 +6,9 @@
 
 #define VIDE -1
 
+#define F_L 800
+#define F_H 600
+
 #define AXE_X 0
 #define AXE_X_BIS 1
 #define AXE_Y 2
@@ -22,5 +25,11 @@
 #define MUR_D 4
 #define MUR_A 2
 #define MUR_AR 5
+
+#define FINI 5000
+#define SCORE1 50
+#define SCORE2 100
+#define SCORE3 200
+#define GAME_OVER 100
 
 #endif
