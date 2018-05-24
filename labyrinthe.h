@@ -52,11 +52,34 @@ int adjacence_piece(int indice,
 		    int laby[LARGEUR][HAUTEUR][PROFONDEUR],
 		    file* candidats);
 		 
-void visualiser_piece_laby(piece_laby  p);
+
 
 void afficher_labyrinthe(file pieces_a_afficher,piece_laby liste_pieces[LARGEUR*HAUTEUR*PROFONDEUR]);
 
 file file_piece_a_afficher_labyrinthe(piece_laby liste_pieces[LARGEUR*HAUTEUR*PROFONDEUR]);
 
+
+void visualiser_piece_laby(piece_laby  p);
 void visualiser_piece_laby_final(piece_laby p );
+void visualiser_piece_laby_depart(piece_laby p);
+
+
+void tracer_element_obj(element el);
+
+void tracer_cube(element el,float transparence);
+
+element creer_cube(point* p,int taille);
+
+element creer_pomme(point* p);
+
+void tracer_sphere(element el);
+
+element creer_bonus(int mur);
+
+void tracer_elements_piece(piece_laby piece_courante);
+
+void deduire_position_element(element el,piece_laby piece_courante);
+
+
+
 #endif

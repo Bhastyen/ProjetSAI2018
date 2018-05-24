@@ -5,10 +5,14 @@
 #include "GL/glut.h"
 #include "math.h"
 #include <time.h>
+#include "./module/mon_allocation.h"
+#include "snake.h"
 
 
-
+piece liste_types_pieces[63];
 int indice_piece_final;
+element pomme;
+int accomplit = 0;
 
 void initilisation_type_piece(piece liste_pieces[63]){
   int k;
@@ -155,12 +159,13 @@ void init_type_pieces_bis(piece liste_pieces[63] ,int nombre_murs,int indice_dep
   int k=0;// indice murs
   int nombre_un=0; //nombre de murs trouver
   int pos; // pos trouver de decalage
-
+  int random_bonus;
+  int indice_mur_bonus;
   int w=0;
 
   while(i<=indice_depart+nombre_combinaisons-1){
     k=0;
-
+    liste_pieces[i].objets = creer_file_vide();
     for(k=0;k<6;k++){
  
       if(liste_pieces[i].murs[k]==1){
@@ -171,7 +176,9 @@ void init_type_pieces_bis(piece liste_pieces[63] ,int nombre_murs,int indice_dep
 	 	
 	while(pos<5){
 	  w=0;
-	
+		liste_pieces[j].objets = creer_file_vide();
+		random_bonus =(rand ()%(2-1))+1;
+		indice_mur_bonus=rand ()%(5);
 	  while(w<=pos){//On recopie le morceau avant la position
 	    liste_pieces[j].murs[w] = liste_pieces[i].murs[w];
 	    w++;
@@ -207,7 +214,12 @@ void init_type_pieces_bis(piece liste_pieces[63] ,int nombre_murs,int indice_dep
 	    }
 	 				
 	  }	 				
-	 			
+	 	if(random_bonus == 1){
+	 	
+    	liste_pieces[j].objets = enfile(liste_pieces[j].objets,creer_bonus(indice_mur_bonus));
+    	 //pieces_a_afficher->debut_file;
+    
+       }		
 	  pos++;
 	  j++;
 	 				
@@ -220,6 +232,8 @@ void init_type_pieces_bis(piece liste_pieces[63] ,int nombre_murs,int indice_dep
       }
 	 	
     }
+    
+    
     i++;
 	
   }
@@ -333,33 +347,33 @@ void creer_labyrinthe(piece_laby liste_pieces[LARGEUR*HAUTEUR*PROFONDEUR]){
   element indice_depart;
   element indice_piece_en_cours;
   indice_depart.indice = PIECE_DEPART;
-  piece liste_types_pieces[63];
+
   initilisation_type_piece(liste_types_pieces);
   piece_laby piece_en_cours;
   file candidats = creer_file_vide();// candidats a la creation du labyrinthe, vont se "choisir" par rapport a l'adjacence
   srand(time(NULL));	
 
   int i,j,k;
-  fprintf(stderr," dans creer_labyrinthe\n");
+
 	
-	
+  /*Initilise matrice HxLxP , servant a déterminer quel pieces ont déja été reconnu*/
   initilisation_labyrinthe(laby);
   //initilisation_premiere_piece(listes_pieces[0],liste_pieces);
+  
+  //Commencement avec la premier piese
   candidats=enfile(candidats,indice_depart);
  
   liste_pieces[PIECE_DEPART].longueur_chemin = 0;
-  // fprintf(stderr," !!!!!!!!!!!!!!!!!dans creer_labyrinthe2 %d file_est_vide(candidats %p\n" , file_est_vide(candidats),candidats);
+  
   
   while ((longueur_chemin < NOMBRE_PIECE)){
-    //fprintf(stderr," dans creer_labyrinthem2\n");	
+  
     if(file_est_vide(candidats)){
     	candidats = enfile(candidats,indice_piece_en_cours);
     
     } 
     indice_piece_en_cours = defile(candidats); 
-    //fprintf(stderr," dans creer_labyrinthe apres defile1  %d \n",indice_piece_en_cours.indice);
-   
-		
+	
     longueur_chemin=adjacence_piece(
 				    indice_piece_en_cours.indice,
 				    liste_pieces,
@@ -367,13 +381,12 @@ void creer_labyrinthe(piece_laby liste_pieces[LARGEUR*HAUTEUR*PROFONDEUR]){
 				    laby,
 				    &candidats);
 
-				    determine_i_k_j(indice_piece_en_cours.indice,&i,&k,&j);
+				   // determine_i_k_j(indice_piece_en_cours.indice,&i,&k,&j);
 				    if(longueur_chemin == NOMBRE_PIECE){
-				    	fprintf(stderr,"longueur chemin %d",longueur_chemin);
 				    	indice_piece_final = indice_piece_en_cours.indice;
 				    
 				    }
-  //  fprintf(stderr,"\n/************indice %d liste  cas %d ******************/\n" ,indice_piece_en_cours.indice, laby[0][0][0]);
+
     }
 }
 
@@ -409,92 +422,97 @@ int adjacence_piece(
      
       switch(w){
       case 0:
-	if (k >0){
-	  k_tmp--;
-	  ok = 1;
-	}
+		 if (k >0){
+		  k_tmp--;
+		  ok = 1;
+		}
   			 	
-	break;
+	 break;
       case 1:	
-	if (j >0){
-	  j_tmp--;
-	  ok = 1;
-	}
-	break;
+			if (j >0 && indice != PIECE_DEPART){// Pour toujorus avoir un sol pour mettre objet
+			  j_tmp--;
+			  ok = 1;
+			}
+		break;
       case 2:
-	if( k<PROFONDEUR-1){
-	  k_tmp++;
-	  ok = 1;
-	}
+			if( k<PROFONDEUR-1){
+			  k_tmp++;
+			  ok = 1;
+			}
 	break;
       case 3:
-	if (j <HAUTEUR-1){
-	  j_tmp++;
-	  ok = 1;
+			if (j <HAUTEUR-1){
+			  j_tmp++;
+			  ok = 1;
   					
 	}
 	break;
       case 4:
-	if(i < LARGEUR-1){
-	  i_tmp++;
-	  ok = 1;
-	}
+			if(i < LARGEUR-1){
+			  i_tmp++;
+			  ok = 1;
+			}
 	break;
-      case 5:
-	if(i>0){
-	  i_tmp--;
-	  ok = 1;
-	}
-	break;
+		  case 5:
+		if(i>0){
+		  i_tmp--;
+		  ok = 1;
+		}
+		break;
   		
   		
 	}
-      if(indice != PIECE_DEPART){// point entree
-	switch(liste_piece[indice].point_entree){
-	case 0:
+	
+	  
+      if(indice != PIECE_DEPART && ok ==1){// point entree
+			switch(liste_piece[indice].point_entree){
+			case 0:
 
-	  liste_piece[indice].murs[2] = 0;
+			  liste_piece[indice].murs[2] = 0;
 
-  			 	
-	  break;
-	case 1:	
-	  liste_piece[indice].murs[3] = 0;
-	  break;
-	case 2:
-	  liste_piece[indice].murs[0] = 0;
-	  break;
-	case 3:
-	  liste_piece[indice].murs[1] = 0;
-	  break;
-	case 4:
-	  liste_piece[indice].murs[5] = 0;
-	  break;
-	case 5:
-	  liste_piece[indice].murs[4] = 0;
-	  break;
+		  			 	
+			  break;
+			case 1:	
+			  liste_piece[indice].murs[3] = 0;
+			  break;
+			case 2:
+			  liste_piece[indice].murs[0] = 0;
+			  break;
+			case 3:
+			  liste_piece[indice].murs[1] = 0;
+			  break;
+			case 4:
+			  liste_piece[indice].murs[5] = 0;
+			  break;
+			case 5:
+			  liste_piece[indice].murs[4] = 0;
+			  break;
 
-	}
+			}
       }
-      if(ok == 1){// Si la piece est adjacente
-	ok = 0;
-	indice_adjacent.indice = calcul_indice(i_tmp,k_tmp,j_tmp);
-	liste_piece[indice].adjacent= enfile(liste_piece[indice].adjacent,indice_adjacent);
+      else{
+      		liste_piece[indice].murs[1] = 1;// permet d'avoir toujorus un sol pour piece de depart
+      }
+		  if(ok == 1){// Si la piece est adjacente
+				ok = 0;
+				indice_adjacent.indice = calcul_indice(i_tmp,k_tmp,j_tmp);
+				liste_piece[indice].adjacent= enfile(liste_piece[indice].adjacent,indice_adjacent);
 
-        
-        
-	//fprintf(stderr," dans adjacence piece OK = 1 indice_adjacent %d , indice_courant %d",indice_adjacent.indice,indice);
-	if(laby[i_tmp][k_tmp][j_tmp] == NON_VUE){
+				
+				
+				//fprintf(stderr," dans adjacence piece OK = 1 indice_adjacent %d , indice_courant %d",indice_adjacent.indice,indice);
+				if(laby[i_tmp][k_tmp][j_tmp] == NON_VUE){
 
-	  /*initialise la position de la piece*/
-	  calcul_position_point( indice_adjacent.indice,&liste_piece[indice_adjacent.indice]);
-	 
-	 // fprintf(stderr," NON VUE \n");
-	  /*ajout nouveau candidat a traiter*/
-	  *candidats = enfile(*candidats,indice_adjacent);
-	  laby[i_tmp][k_tmp][j_tmp] = NON_TRAITEE;
-	  liste_piece[indice_adjacent.indice].point_entree = w;
-	  liste_piece[indice_adjacent.indice].longueur_chemin =liste_piece[indice].longueur_chemin +1 ;
-  				
+				  /*initialise la position de la piece*/
+				  calcul_position_point( indice_adjacent.indice,&liste_piece[indice_adjacent.indice]);
+				 
+				 // fprintf(stderr," NON VUE \n");
+				  /*ajout nouveau candidat a traiter*/
+				  *candidats = enfile(*candidats,indice_adjacent);
+				  laby[i_tmp][k_tmp][j_tmp] = NON_TRAITEE;
+				  liste_piece[indice_adjacent.indice].point_entree = w;
+				  liste_piece[indice_adjacent.indice].longueur_chemin =liste_piece[indice].longueur_chemin +1 ;
+	  				
 	};
       }
       else{//SInon on ajout un mur si contrainte
@@ -591,22 +609,97 @@ file file_piece_a_afficher_labyrinthe(piece_laby liste_pieces[LARGEUR*HAUTEUR*PR
 
 void afficher_labyrinthe(file pieces_a_afficher,piece_laby liste_pieces[LARGEUR*HAUTEUR*PROFONDEUR]){
   int indice;
-  struct_cellule* iterateur_piece_a_afficher = pieces_a_afficher->debut_file;
+  struct_cellule* iterateur_piece_a_afficher  = pieces_a_afficher->debut_file;
   int i= 0;
+  
+ 
   //fprintf(stderr," dans afficher_lab \n");
   while(iterateur_piece_a_afficher!=NULL){
-    // fprintf(stderr," dans afficher_lab %d %p  %p \n",i ,iterateur_piece_a_afficher , iterateur_piece_a_afficher->suivant); i++;
-  indice = iterateur_piece_a_afficher->objet.indice;
-  if(indice == indice_piece_final){
-   visualiser_piece_laby_final(liste_pieces[indice]);
-  
-  }
-    visualiser_piece_laby(liste_pieces[indice]);
-    iterateur_piece_a_afficher = iterateur_piece_a_afficher->suivant;
-   }
-} 
+		// fprintf(stderr," dans afficher_lab %d %p  %p \n",i ,iterateur_piece_a_afficher , iterateur_piece_a_afficher->suivant); i++;
+	  indice = iterateur_piece_a_afficher->objet.indice;
+	  if(indice == indice_piece_final){
+	   visualiser_piece_laby_final(liste_pieces[indice]);
+	  
+	  }
+	  else if(indice == PIECE_DEPART){
+	   	visualiser_piece_laby_depart(liste_pieces[indice]);
+	  
+	  }else{
+		visualiser_piece_laby(liste_pieces[indice]);
+		
+	   }
+	   tracer_elements_piece(liste_pieces[indice]);
+	   iterateur_piece_a_afficher = iterateur_piece_a_afficher->suivant;
+	}		 
 
+}
 
+void tracer_elements_piece(piece_laby piece_courante){
+	int type_piece = piece_courante.type_piece;
+	int type_element;
+	
+	file test= liste_types_pieces[type_piece].objets;
+//fprintf(stderr,"test tracer_element %p \n",test->debut_file);
+	if(!file_est_vide(test)){
+		struct_cellule* iterateur_element_a_afficher = test->debut_file;
+		 
+		 while(iterateur_element_a_afficher != NULL){
+				element el = iterateur_element_a_afficher->objet;
+				type_element = el.o->obj[0];
+				if(type_element == 2){
+					deduire_position_element(el,piece_courante);
+				}
+		
+				tracer_element_obj(el);
+				iterateur_element_a_afficher = iterateur_element_a_afficher -> suivant;
+		}
+	}
+
+}
+
+void deduire_position_element(element el,piece_laby piece_courante){
+	int x = getX(piece_courante.pos_bg) ;
+	int y = getY(piece_courante.pos_bg) ;
+	int z = getZ(piece_courante.pos_bg);
+	int indice_mur = el.o->obj[3];
+	switch(indice_mur){
+		case 0:
+			el.o->obj[4]=x+TAILLE_PIECE/2;
+			el.o->obj[5]=y;
+			el.o->obj[6]=z+TAILLE_PIECE/2;
+		break;
+		
+		case 1:
+			el.o->obj[4]= x+TAILLE_PIECE/2;
+			el.o->obj[5]= y+TAILLE_PIECE/2;
+			el.o->obj[6]= z;		
+		break;
+		
+		case 2:
+			el.o->obj[4]= x+TAILLE_PIECE/2;
+			el.o->obj[5]= y+TAILLE_PIECE;
+			el.o->obj[6]= z+TAILLE_PIECE/2;;		
+		break;
+
+		case 3:
+			el.o->obj[4]=x+TAILLE_PIECE/2;
+			el.o->obj[5]=y+TAILLE_PIECE/2;
+			el.o->obj[6]=z+TAILLE_PIECE;		
+		break;
+
+		case 4:
+			el.o->obj[4]=x+TAILLE_PIECE;
+			el.o->obj[5]=y+TAILLE_PIECE/2;
+			el.o->obj[6]=z+TAILLE_PIECE/2;		
+		break;
+		
+		case 5:
+			el.o->obj[4]=x;
+			el.o->obj[5]=y+TAILLE_PIECE/2;
+			el.o->obj[6]=z+TAILLE_PIECE/2;		
+		break;
+	}
+}
 void visualiser_piece_laby_final(piece_laby p){
 
 	
@@ -679,10 +772,219 @@ void visualiser_piece_laby_final(piece_laby p){
 
 	}
 }
+
+element creer_pomme(point* p){
+	type_objet* pmm=allocation_memoire(1,sizeof(type_objet));
+	element pomme;
+	pomme.o = pmm;
+	pomme.o->obj[0]=1;// sphere
+	pomme.o->obj[1]=12;//pas sphere
+	pomme.o->obj[2]=1;//rayon
+	pomme.o->obj[3]=(int)getX(p)+TAILLE_PIECE/2;
+	pomme.o->obj[4]=(int)getY(p)+TAILLE_PIECE/2;
+	pomme.o->obj[5]=(int)getZ(p) + pomme.o->obj[2];
+	pomme.o->obj[6]=accomplit;
+	
+  point* pc =creer_point((float) getX(p)+TAILLE_PIECE/3,(float) (getY(p) +TAILLE_PIECE/3), (float) (getZ(p)+pomme.o->obj[2]));
+  element cube = creer_cube(pc,pomme.o->obj[2]*4);
+  
+  tracer_sphere(pomme);
+  if(pomme.o->obj[6] == 0){
+  	tracer_cube(cube,0.5);
+  }
+  return pomme;
+
+}
+
+element creer_bonus(int mur){
+
+	type_objet* bns=allocation_memoire(1,sizeof(type_objet));
+	element bonus;
+	bonus.o = bns;
+	bonus.o->obj[0]=2;// pomme
+	bonus.o->obj[1]=12;//pas sphere
+	bonus.o->obj[2]=1;//rayon
+	bonus.o->obj[3]=mur;//mur d'accroche
+	bonus.o->obj[4]=-1;
+	bonus.o->obj[5]=-1;
+	bonus.o->obj[6]=-1;
+	
+	return bonus;
+}
+
+element creer_cube(point* p,int taille){
+	element cube; //mon_allocation(1,sizeof(type_objet));
+	type_objet* cb=allocation_memoire(1,sizeof(type_objet));
+	cube.o = cb;
+	cube.o->obj[0]=0;// cube
+	cube.o->obj[1]=taille;//taille
+	cube.o->obj[2]=(int)getX(p);
+	cube.o->obj[3]=(int)getY(p);
+	cube.o->obj[4]=(int)getZ(p);
+	
+	return cube;
+}
+void tracer_element_obj(element el){
+	int type_e = (int)(el.o->obj[0]);
+	switch(type_e){
+		case 0://cas cube
+			tracer_cube(el,1.0);
+		break;
+		
+		case 1://cas sphere
+			tracer_sphere(el);
+		break;
+		
+		case 2://bonus  
+		    glColor3f(0.37, 0.80, 0.85);
+		    tracer_sphere(el);
+			//tracer_pilier(el);
+		break;
+		case 3://cas rectangle/pilier
+			//tracer_pilier(el);
+		break;
+	
+	}
+}
+
+void tracer_cube(element el,float transparence){
+	
+  int x1=(int)el.o->obj[2];
+  int x2=x1+(int)el.o->obj[1];
+  int y1=(int)el.o->obj[3];
+  int y2=y1+(int)el.o->obj[1];
+  int z1=(int)el.o->obj[4];
+  int z2=z1+(int)el.o->obj[1];
+  glBegin(GL_QUADS);
+    glEnable(GL_BLEND);
+ 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+    glColor4f(1, 0, 0,transparence);
+
+    glVertex3f(x1, y1, z2);
+    glVertex3f(x1, y1, z1);
+    glVertex3f(x2, y1, z1);
+    glVertex3f(x2, y1, z2);
+		
+
+    glVertex3f(x1, y1, z1);
+    glVertex3f(x2, y1, z1);
+    glVertex3f(x2, y2, z1);
+    glVertex3f(x1, y2, z1);
+ 
+
+    glVertex3f(x1, y2, z2);
+    glVertex3f(x2, y2, z2);
+    glVertex3f(x2, y2, z1);
+    glVertex3f(x1, y2, z1);
+
+    
+    glVertex3f(x1, y1, z2);
+    glVertex3f(x1, y2, z2);
+    glVertex3f(x2, y2, z2);
+    glVertex3f(x2, y1, z2);
+	
+    glVertex3f(x2, y1, z2);
+    glVertex3f(x2, y2 ,z2);
+    glVertex3f(x2, y2, z1);
+    glVertex3f(x2, y1, z1);
+    
+    glVertex3f(x1, y1, z2);
+    glVertex3f(x1, y2, z2);
+    glVertex3f(x1, y2, z1);
+    glVertex3f(x1, y1, z1);
+
+	glEnd();
+  
+
+}
+void tracer_sphere(element el){
+	point* p = creer_point((float)(el.o->obj[3]),(float)(el.o->obj[4]),(float)(el.o->obj[5]));
+	int rayon = el.o->obj[2];
+	int pas = el.o->obj[1];
+	afficherSphere(rayon,p,pas);
+}
+
+
+void visualiser_piece_laby_depart(piece_laby p){
+
+	
+  int x1=(int)getX(p.pos_bg);
+  int x2=x1+TAILLE_PIECE;
+  int y1=(int)getY(p.pos_bg);
+  int y2=y1+TAILLE_PIECE;
+  int z1=(int)getZ(p.pos_bg);
+  int z2=z1+TAILLE_PIECE;
+ 
+  pomme=creer_pomme(p.pos_bg); 
+  
+  
+  glBegin(GL_QUADS);
+  //cyan
+	
+  if(p.murs[0]==1){
+    glColor3f(0.85, 0.65, 0.37);
+    glVertex3f(x1, y1, z2);
+    glVertex3f(x1, y1, z1);
+    glVertex3f(x2, y1, z1);
+    glVertex3f(x2, y1, z2);
+		
+  }	
+  // jaune
+    
+  if(p.murs[1]==1){
+    glColor3f(0.80, 0.85, 0.37);
+    glVertex3f(x1, y1, z1);
+    glVertex3f(x2, y1, z1);
+    glVertex3f(x2, y2, z1);
+    glVertex3f(x1, y2, z1);
+  }
+      
+  //rouge
+  if(p.murs[2]==1){
+	   
+   glColor3f(0.85, 0.65, 0.37);
+   
+    glVertex3f(x1, y2, z2);
+    glVertex3f(x2, y2, z2);
+    glVertex3f(x2, y2, z1);
+    glVertex3f(x1, y2, z1);
+  }
+  // bleu 0
+  if(p.murs[3]==1){
+    glColor3f(0.80, 0.85, 0.37);
+    
+    glVertex3f(x1, y1, z2);
+    glVertex3f(x1, y2, z2);
+    glVertex3f(x2, y2, z2);
+    glVertex3f(x2, y1, z2);
+  }
+		
+  // rose
+  if(p.murs[4]==1){
+    glColor3f(0.58 ,0.85, 0.37);
+    glVertex3f(x2, y1, z2);
+    glVertex3f(x2, y2 ,z2);
+    glVertex3f(x2, y2, z1);
+    glVertex3f(x2, y1, z1);
+		
+  }
+  //vert
+  if(p.murs[5]==1){
+    // glColor3f(0, 0.9, 0);
+    glColor3f(0.58 ,0.85, 0.37);
+    
+    glVertex3f(x1, y1, z2);
+    glVertex3f(x1, y2, z2);
+    glVertex3f(x1, y2, z1);
+    glVertex3f(x1, y1, z1);
+
+	} 
+	glEnd();
+}
 void visualiser_piece_laby(piece_laby  p){// different de afficher piece laby
 	
   int x1=(int)getX(p.pos_bg);
-  int x2=x1+1*TAILLE_PIECE;
+  int x2=x1+TAILLE_PIECE;
   int y1=(int)getY(p.pos_bg);
   int y2=y1+TAILLE_PIECE;
   int z1=(int)getZ(p.pos_bg);
