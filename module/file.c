@@ -8,7 +8,7 @@ file creer_file_vide(){
 }
 
 int file_est_vide(file f){
-  if(f==NULL){
+  if(f==NULL || (f->debut_file == NULL && f->fin_file == NULL)){
     return 1;
   }
   return 0;
@@ -68,8 +68,10 @@ element defile ( file f){
   if(f->fin_file == f->debut_file){ // cas un seul element
     nombre=f->fin_file->objet;
    // fprintf(stderr,"1 %p %p \n",f->debut_file,f->fin_file);
-    f->debut_file=NULL;
-    f->fin_file=NULL;
+    f->debut_file = NULL;
+    f->fin_file = NULL;
+   
+    fprintf(stderr,"l'enculer est ici module file \n");
     // free(f->debut_file);
     return nombre;
     
