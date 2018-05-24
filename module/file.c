@@ -71,7 +71,7 @@ element defile ( file f){
     f->debut_file = NULL;
     f->fin_file = NULL;
    
-    fprintf(stderr,"l'enculer est ici module file \n");
+
     // free(f->debut_file);
     return nombre;
     

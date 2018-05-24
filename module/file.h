@@ -4,7 +4,7 @@
 
 
 typedef struct {
-  double obj[5];// 0 --> type_objet (si 0 = cercle , 1=cube , 2=rectangle, 3= tube) 1--> position ( si 0 = centre cercle , 1 = bas gauche cube , 2 = bas gauche rectangle) 2--> (si 1 == largeur arete , 2 == largeur arete) 3--> ( 2->hauteur rectangle))
+  double obj[7];// 0 --> type_objet (si 0 = cercle , 1=cube , 2=rectangle, 3= tube) 1--> position ( si 0 = centre cercle , 1 = bas gauche cube , 2 = bas gauche rectangle) 2--> (si 1 == largeur arete , 2 == largeur arete) 3--> ( 2->hauteur rectangle))
 } type_objet;
 
 typedef union {
